@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ai-booking-system
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn core.wsgi:application

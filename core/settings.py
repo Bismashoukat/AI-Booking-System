@@ -88,3 +88,5 @@ DEFAULT_FROM_EMAIL = 'noreply@aibooking.com'
 
 # AI API Key (add your key in .env later)
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
+
+
