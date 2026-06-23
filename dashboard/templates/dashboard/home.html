@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>🏠 Business Dashboard</h1>
+            <p style="color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem;">{{ today }}</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="/dashboard/services/" class="btn btn-outline">💼 Services</a>
+            <a href="/dashboard/knowledge/" class="btn btn-outline">🧠 Knowledge</a>
+            <a href="/dashboard/bookings/" class="btn btn-primary">📋 All Bookings</a>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" style="margin-bottom: 1.5rem;">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_bookings }}</div>
+            <div class="stat-label">Total Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: var(--yellow);">{{ today_bookings }}</div>
+            <div class="stat-label">Today's Appointments</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: var(--yellow);">{{ pending }}</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: var(--green);">{{ confirmed }}</div>
+            <div class="stat-label">Confirmed</div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; flex-wrap: wrap;">
+
+        <!-- Today's appointments -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem;">⏰ Today's Schedule</h2>
+            {% if todays_appointments %}
+                {% for b in todays_appointments %}
+                <div style="padding: 0.75rem; background: var(--surface); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--accent);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">{{ b.customer_name }}</div>
+                            <div style="color: var(--muted); font-size: 0.8rem;">{{ b.service.name }} — {{ b.time }}</div>
+                        </div>
+                        <span class="badge badge-{{ b.status|lower }}">{{ b.status }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: var(--muted); text-align: center; padding: 1rem;">No appointments today</p>
+            {% endif %}
+        </div>
+
+        <!-- Recent bookings -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem;">🕐 Recent Bookings</h2>
+            {% for b in recent_bookings %}
+            <div style="padding: 0.6rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 0.875rem; font-weight: 500;">{{ b.customer_name }}</div>
+                    <div style="font-size: 0.75rem; color: var(--muted);">{{ b.date }} · {{ b.service.name }}</div>
+                </div>
+                <span class="badge badge-{{ b.status|lower }}">{{ b.status }}</span>
+            </div>
+            {% empty %}
+            <p style="color: var(--muted); text-align: center; padding: 1rem;">No bookings yet</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

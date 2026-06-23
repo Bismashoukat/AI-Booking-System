@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Manage Services{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <div class="page-header">
+        <h1>💼 Manage Services</h1>
+        <a href="/dashboard/" class="btn btn-outline">← Dashboard</a>
+    </div>
+
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <h2 style="margin-bottom: 1rem;">+ Add Service</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Service Name</label>
+                    <input type="text" name="name" class="form-input" placeholder="e.g. Skin Facial" required>
+                </div>
+                <div class="form-group">
+                    <label>Price (Rs.)</label>
+                    <input type="number" name="price" class="form-input" placeholder="5000" required>
+                </div>
+                <div class="form-group">
+                    <label>Duration (minutes)</label>
+                    <input type="number" name="duration" class="form-input" placeholder="60" value="60">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" class="form-input" placeholder="Short description">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Service</button>
+        </form>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Duration</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in services %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 500;">{{ s.name }}</div>
+                        {% if s.description %}<div style="font-size: 0.75rem; color: var(--muted);">{{ s.description }}</div>{% endif %}
+                    </td>
+                    <td>{{ s.duration }} mins</td>
+                    <td>Rs. {{ s.price }}</td>
+                    <td>
+                        {% if s.is_active %}
+                        <span class="badge badge-confirmed">Active</span>
+                        {% else %}
+                        <span class="badge badge-cancelled">Inactive</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--muted);">No services yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

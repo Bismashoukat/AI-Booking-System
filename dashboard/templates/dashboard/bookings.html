@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>📋 All Bookings</h1>
+        <a href="/dashboard/" class="btn btn-outline">← Dashboard</a>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <select name="status" class="form-input" style="width: auto;" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Confirmed" {% if status_filter == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+            <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+            <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+        <input type="date" name="date" value="{{ date_filter }}" class="form-input" style="width: auto;" onchange="this.form.submit()">
+        <a href="/dashboard/bookings/" class="btn btn-outline">Clear</a>
+    </form>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Date & Time</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td style="color: var(--muted);">#{{ b.id }}</td>
+                    <td>
+                        <div style="font-weight: 500;">{{ b.customer_name }}</div>
+                        {% if b.email %}<div style="font-size: 0.75rem; color: var(--muted);">{{ b.email }}</div>{% endif %}
+                    </td>
+                    <td>{{ b.service.name }}</td>
+                    <td>
+                        <div>{{ b.date }}</div>
+                        <div style="color: var(--muted); font-size: 0.8rem;">{{ b.time }}</div>
+                    </td>
+                    <td>{{ b.phone }}</td>
+                    <td><span class="badge badge-{{ b.status|lower }}">{{ b.status }}</span></td>
+                    <td>
+                        <form method="POST" action="/dashboard/bookings/{{ b.id }}/status/" style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                            {% csrf_token %}
+                            <button name="status" value="Confirmed" class="btn btn-success" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">✓</button>
+                            <button name="status" value="Completed" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">✅</button>
+                            <button name="status" value="Cancelled" class="btn btn-danger" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">✕</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--muted);">No bookings found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

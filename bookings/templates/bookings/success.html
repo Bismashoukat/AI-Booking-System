@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed!{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 480px; text-align: center; padding-top: 4rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+    <h1 style="color: var(--green); margin-bottom: 0.5rem;">Appointment Confirmed!</h1>
+    <p style="color: var(--muted); margin-bottom: 2rem;">Your appointment has been successfully booked. We'll see you soon!</p>
+
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/bookings/" class="btn btn-primary">📅 Book Another</a>
+        <a href="/chatbot/" class="btn btn-outline">💬 Chat with AI</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Booking System{% endblock %}</title>
+    <style>
+        /* ── DESIGN TOKENS ── */
+        :root {
+            --bg: #0f0f14;
+            --surface: #1a1a24;
+            --card: #22222f;
+            --border: #2e2e40;
+            --accent: #7c6fff;
+            --accent-light: #a89cff;
+            --green: #4ade80;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --text: #e8e8f0;
+            --muted: #8888aa;
+            --font: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.15s;
+        }
+
+        .nav-links a:hover { color: var(--text); background: var(--card); }
+        .nav-links a.active { color: var(--accent-light); background: rgba(124,111,255,0.12); }
+
+        /* ── LAYOUT ── */
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #6b5fee; }
+        .btn-success { background: #166534; color: var(--green); }
+        .btn-danger { background: #7f1d1d; color: var(--red); }
+        .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-outline:hover { color: var(--text); border-color: var(--accent); }
+
+        /* ── FORM ── */
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .form-input, input[type="text"], input[type="email"], input[type="date"],
+        input[type="time"], select, textarea {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 0.6rem 0.9rem;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-input:focus, input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
+        select option { background: var(--surface); }
+
+        /* ── BADGE ── */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-pending { background: rgba(251,191,36,0.15); color: var(--yellow); }
+        .badge-confirmed { background: rgba(74,222,128,0.15); color: var(--green); }
+        .badge-completed { background: rgba(124,111,255,0.15); color: var(--accent-light); }
+        .badge-cancelled { background: rgba(248,113,113,0.15); color: var(--red); }
+
+        /* ── TABLE ── */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+        td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(46,46,64,0.5); font-size: 0.875rem; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* ── ALERTS ── */
+        .alert { padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; }
+        .alert-success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); color: var(--green); }
+        .alert-error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2); color: var(--red); }
+
+        /* ── STATS GRID ── */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--accent-light); }
+        .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+        h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+        h2 { font-size: 1.2rem; font-weight: 600; color: var(--text); }
+        h3 { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+        .page-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .gap-1 { gap: 0.5rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <a class="nav-brand" href="/chatbot/">🤖 AI Receptionist</a>
+        <div class="nav-links">
+            <a href="/chatbot/">💬 Chat</a>
+            <a href="/bookings/">📅 Book</a>
+            <a href="/services/">💼 Services</a>
+            {% if user.is_authenticated %}
+                <a href="/dashboard/">🏠 Dashboard</a>
+                <a href="/accounts/logout/">Logout</a>
+            {% else %}
+                <a href="/accounts/login/">Owner Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div style="padding: 0.75rem 1.5rem; background: var(--surface);">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>
