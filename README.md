@@ -59,6 +59,20 @@ Instead of hiring a receptionist, businesses can use this system to:
 - Working hours, location, policies, prices
 
 ---
+## 📸 Screenshots
+
+### AI Chatbot
+![Chatbot](<img width="1589" height="764" alt="WhatsApp Image 2026-06-24 at 11 53 11 AM" src="https://github.com/user-attachments/assets/04eee823-cdd8-4b00-ac8d-9dc91ceff709" />
+
+
+### Owner Dashboard  
+![Dashboard]<img width="1599" height="753" alt="WhatsApp Image 2026-06-24 at 11 52 26 AM" src="https://github.com/user-attachments/assets/128c683a-a97d-44d2-9791-034bacadb7c1" />
+
+
+### Booking Form
+![Booking](<img width="1599" height="753" alt="WhatsApp Image 2026-06-24 at 11 51 29 AM" src="https://github.com/user-attachments/assets/54bfa948-af43-47e3-a744-8bc3ea74781a" />
+
+
 
 ## 🏗️ Tech Stack
 
